@@ -1,0 +1,78 @@
+body {
+    background-color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+html.dark body {
+    background-color: #0f172a; /* slate-900 */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 350px;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+
+.status-btn {
+    cursor: pointer;
+    font-size: 1.25rem; /* Slightly smaller */
+    line-height: 1;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.status-btn:hover {
+   transform: scale(1.1);
+}
+
+/* Specific styles for icons */
+.important-btn.marked { color: #facc15; } /* yellow-400 */
+.important-btn.unmarked { color: #cbd5e1; } /* slate-300 */
+html.dark .important-btn.unmarked { color: #475569; } /* slate-600 */
+
+
+.solved-btn.marked { color: #22c55e; } /* green-500 */
+.solved-btn.unmarked { color: #cbd5e1; } /* slate-300 */
+html.dark .solved-btn.unmarked { color: #475569; } /* slate-600 */
+
+/* Custom range slider style for dark mode */
+html.dark input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  background: #334155; /* slate-700 */
+  border-radius: 5px;
+  outline: none;
+}
+
+html.dark input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #38bdf8; /* sky-400 */
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+html.dark input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #38bdf8; /* sky-400 */
+  cursor: pointer;
+  border-radius: 50%;
+}
+

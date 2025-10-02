@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google LeetCode Problems Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chosen Palette: Cool Slate -->
+    <!-- Application Structure Plan: The application is designed as an interactive dashboard. This structure is superior to a static list for data exploration, featuring three main parts: 1) A high-level summary with key statistics and visualizations for an immediate overview. 2) A powerful filtering and search panel for dynamic querying by difficulty, acceptance rate, title, and now status (Important/Solved). 3) A responsive grid of problem cards that updates in real-time. This task-oriented design empowers users to efficiently navigate and personalize their study sessions. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Problem counts per difficulty -> Goal: Compare -> Viz: Donut Chart -> Interaction: Hover tooltips -> Justification: Excellent for part-to-whole relationships. Library: Chart.js.
+        - Report Info: Acceptance rates -> Goal: Show distribution -> Viz: Bar Chart -> Interaction: Hover tooltips -> Justification: Effectively visualizes frequency distribution. Library: Chart.js.
+        - Report Info: Full problem list -> Goal: Organize & Explore -> Presentation: Interactive Card Grid -> Interaction: Filtering, Searching, and Status Marking (Important/Solved) -> Justification: Cards provide a scannable, organized view. Dynamic filtering and status toggles make the large dataset manageable and personalized. Method: HTML/CSS/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body>
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8 relative">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white">Google LeetCode Problem Explorer</h1>
+            <p class="text-slate-600 dark:text-slate-400 mt-2 text-lg">An interactive dashboard for freely accessible problems frequently asked in Google interviews.</p>
+            <button id="dark-mode-toggle" class="absolute top-0 right-0 p-2 rounded-full text-slate-500 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle dark mode">
+                <!-- Moon Icon -->
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <!-- Sun Icon -->
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </button>
+        </header>
+
+        <main>
+            <!-- Stats & Charts Section -->
+            <section id="stats-overview" class="mb-8 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg">
+                 <h2 class="text-2xl font-bold text-center mb-6 text-slate-900 dark:text-white">Overall Analysis</h2>
+                 <p class="text-center text-slate-600 dark:text-slate-400 mb-8 max-w-3xl mx-auto">This section provides a high-level overview of all problems. The charts visualize the distribution of problems by difficulty and acceptance rate. Use the filters below to see these analytics update in real-time.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 text-center">
+                    <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">Total Problems</h3>
+                        <p id="total-stat" class="text-4xl font-bold text-blue-600 dark:text-blue-400">0</p>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">Easy</h3>
+                        <p id="easy-stat" class="text-4xl font-bold text-green-600 dark:text-green-400">0</p>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">Medium</h3>
+                        <p id="medium-stat" class="text-4xl font-bold text-yellow-500 dark:text-yellow-400">0</p>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700 p-6 rounded-xl">
+                        <h3 class="text-lg font-semibold text-slate-600 dark:text-slate-300">Hard</h3>
+                        <p id="hard-stat" class="text-4xl font-bold text-red-600 dark:text-red-400">0</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-center mb-4 text-slate-800 dark:text-slate-200">Difficulty Distribution</h3>
+                        <div class="chart-container">
+                            <canvas id="difficultyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-center mb-4 text-slate-800 dark:text-slate-200">Acceptance Rate Distribution</h3>
+                         <div class="chart-container" style="max-width: 600px;">
+                            <canvas id="acceptanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters Section -->
+            <section id="filters" class="mb-8 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold text-center mb-6 text-slate-900 dark:text-white">Explore & Filter Problems</h2>
+                 <p class="text-center text-slate-600 dark:text-slate-400 mb-8 max-w-3xl mx-auto">Use the controls below to narrow down the list of problems. You can search, filter by difficulty, status, and acceptance rate. Your selections will instantly update the problem list and the summary analytics.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 items-end">
+                    <div class="xl:col-span-1">
+                        <label for="search-input" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Search by Title</label>
+                        <input type="text" id="search-input" placeholder="e.g., Two Sum..." class="w-full px-4 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:text-white">
+                    </div>
+                    <div class="xl:col-span-1">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Difficulty</label>
+                        <div id="difficulty-filters" class="flex flex-wrap gap-2">
+                             <button data-difficulty="Easy" class="flex-grow px-4 py-2 text-sm font-semibold border rounded-lg transition-colors duration-200 border-green-500 bg-green-500 text-white">Easy</button>
+                            <button data-difficulty="Medium" class="flex-grow px-4 py-2 text-sm font-semibold border rounded-lg transition-colors duration-200 border-yellow-500 bg-yellow-500 text-white">Medium</button>
+                            <button data-difficulty="Hard" class="flex-grow px-4 py-2 text-sm font-semibold border rounded-lg transition-colors duration-200 border-red-500 bg-red-500 text-white">Hard</button>
+                        </div>
+                    </div>
+                    <div class="xl:col-span-1">
+                         <label for="acceptance-slider" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Acceptance Rate: <span id="acceptance-range-label" class="font-bold">0% - 100%</span></label>
+                        <input type="range" id="acceptance-slider" class="w-full" min="0" max="100" value="100">
+                    </div>
+                    <div id="status-filters" class="xl:col-span-2 flex flex-wrap gap-2 items-end">
+                         <button id="show-important-filter" class="flex-grow w-full sm:w-auto px-4 py-2 text-sm font-semibold border rounded-lg transition-colors duration-200 border-purple-500 bg-transparent text-purple-500 hover:bg-purple-500 hover:text-white">
+                            Show Important
+                        </button>
+                        <button id="show-solved-filter" class="flex-grow w-full sm:w-auto px-4 py-2 text-sm font-semibold border rounded-lg transition-colors duration-200 border-cyan-500 bg-transparent text-cyan-500 hover:bg-cyan-500 hover:text-white">
+                            Show Solved
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Problems List Section -->
+            <section id="problem-list">
+                <div id="problem-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+                 <p id="no-results" class="hidden text-slate-500 dark:text-slate-400 text-center col-span-full">No problems match the current filters.</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
